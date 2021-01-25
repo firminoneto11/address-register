@@ -2,6 +2,7 @@
 from csv import DictWriter
 from csv import DictReader
 from reset_screen import clear_console, clear_pycharm
+from os.path import exists
 
 
 class Address:
@@ -92,15 +93,13 @@ class Address:
     def save_on_database(self):
         """
         This method is the one responsible for adding the new addresses to the database, which in this case, is a CSV
-        file. It imports the DictWriter class from csv module, to write the instance attributes in the file. It also
-        creates the csv file named 'addresses.csv' in case the same doesn't exists.
+        file. It imports the DictWriter class from csv module, to write the instance attributes in the file.
         :return: None.
         """
         try:
-            with open(".\\addresses.csv", mode='a', encoding='utf-8', newline='') as file:
+            with open(create_database(), mode='a', encoding='utf-8', newline='') as file:
                 keys = ['CEP', 'Endereco', 'Numero', 'Bairro', 'UF', 'Cidade', 'Complemento', 'Descricao']
                 writer = DictWriter(file, fieldnames=keys)
-                writer.writeheader()
                 writer.writerow(
                     {'CEP': self.cep,
                         'Endereco': self.endereco,
@@ -115,13 +114,32 @@ class Address:
             return f"Houve um problema na hora de salvar os dados. Detalhes do problema: {error}"
 
 
-def read_database(database):
-    """This function reads the csv file passed as argument, to show all the elements that are in it, trying to repli
-    cate a search query in a database. Also added a minor verification to show only the values and not the keys from
-    the dictionary.
+def create_database():
+    """
+    This functions checks if the databse exists in the relative path of the system file. If it doesn't, creates a new
+    csv file with a header in it, if it does, pass to the next instruction.
+    :return: Returns the path to the csv file created or existing.
+    """
+    new_db = ".\\addresses.csv"
+    if exists(new_db) is False:
+        try:
+            with open(new_db, mode='a', encoding='utf-8', newline='') as db:
+                keys = ['CEP', 'Endereco', 'Numero', 'Bairro', 'UF', 'Cidade', 'Complemento', 'Descricao']
+                db_creator = DictWriter(db, fieldnames=keys)
+                db_creator.writeheader()
+        except Exception as error:
+            return print(f"Houve um erro na hora de criar a base de dados do sistema. Detalhes do erro: {error}")
+    else:
+        return new_db
+
+
+def read_database():
+    """This function reads the csv file that the function create_database() returns, to show all the elements that are
+     in it, trying to replicate a search query in a database. Also added a minor verification to show only the values
+    and not the keys from the dictionary.
     :return: Returns the amount of addresses registered."""
     try:
-        with open(database, mode='r', encoding='utf-8') as db:
+        with open(create_database(), mode='r', encoding='utf-8') as db:
             reader = DictReader(db)
             counter = 0
             for row in reader:
@@ -146,13 +164,13 @@ def read_database(database):
         return f"Total de endereços cadastrados: {counter}"
 
 
-def check_cep(element, database):
+def check_cep(element):
     """
     This function checks if the instance attribute 'CEP' already exists in the csv file that is working as a database.
     :param element: Receives the argument 'CEP' from the user.
-    :param database: Receives the path to the csv file that is working as a database. Which in this case is address.csv
     :return: Returns True if the 'CEP' received as element is in the database or False if isn't.
     """
+    database = create_database()
     try:
         with open(database):
             pass
@@ -189,7 +207,7 @@ def register_address():
         print("O CEP informado é inválido! Insira o CEP do novo endereço com 8 dígitos, sem traços ou espaços.")
         cep = input("CEP: ")
         num = [number for number in cep if number in numbers]
-    if check_cep("".join(num), ".\\addresses.csv"):
+    if check_cep("".join(num)):
         clear_pycharm()
         clear_console()
         print("\nO CEP informado já se encontra cadastrado no sistema!")
@@ -282,5 +300,6 @@ def register_address():
 
 
 if __name__ == '__main__':
-    print(read_database(".\\addresses.csv"))
+    create_database()
+    print(read_database())
     print(register_address())
