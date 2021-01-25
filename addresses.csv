@@ -1,8 +1,4 @@
 CEP,Endereco,Numero,Bairro,UF,Cidade,Complemento,Descricao
-12345678,Barroso,s/n,Mafrense,Maranhão,Timon,,
-CEP,Endereco,Numero,Bairro,UF,Cidade,Complemento,Descricao
-50505050,Barroso,2020,Julião,Roraima,Senhor Do Bonfim,,
-CEP,Endereco,Numero,Bairro,UF,Cidade,Complemento,Descricao
-87654321,Pires,300,Cerâmica Sul,Piauí,Parnaíba,,
-CEP,Endereco,Numero,Bairro,UF,Cidade,Complemento,Descricao
-45678123,Limeira,4040,Macaúba,Amazonas,Macapá,,
+12345678,Barroso,s/n,Vermelha,Piauí,Teresina,,
+87645321,Manoel Da Paz,2020,São João,Maranhão,Timon,comp,desc
+87654321,Japão,300,Vulkan,Paraná,Settlement,,
