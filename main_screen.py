@@ -1,10 +1,15 @@
 
 from reset_screen import clear_console, clear_pycharm
 from classes_and_functions import register_address, read_database
+from os.path import exists
 
 
-# Inserting the csv file that will work as database in a variable
+# Inserting the csv file that will work as database in a variable, and verifying if it exists, to prevent errors before
+# the code execution
 dtb = ".\\addresses.csv"
+if exists(dtb) is False:
+    with open(dtb, mode='w', encoding='utf-8'):
+        pass
 
 while True:
     # Intro of the program
